@@ -1,0 +1,5 @@
+# Project exclude paths
+/ExternalIncomeApi/target/
+/InternalKycApi/target/
+/PayDayBankApi/target/
+/target/

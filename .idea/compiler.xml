@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="ExternalIncomeApi" />
+        <module name="InternalKycApi" />
+        <module name="PayDayBankApi" />
+        <module name="ExternalIncomeApi2" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="--enable-preview" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ExternalIncomeApi" options="-parameters" />
+      <module name="InternalKycApi" options="" />
+      <module name="PayDayBank" options="-parameters" />
+      <module name="PayDayBankApi" options="" />
+    </option>
+  </component>
+</project>
