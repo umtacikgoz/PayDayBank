@@ -11,7 +11,8 @@ PayDayBankApi : 8090 (8090/loan) Mobile Backend API olarak çalışan servis bur
 
 Bu servislerin her birini ayrı image'lar haline getirip(docker.hub'a yükleyip vs) microservice çözümü haline getirmek istedim.Lokalde projeleri çalıştırıp (java -jar ./target/InternalKycApi-1.0-SNAPSHOT.jar gibi) image'ları oluşturmada hata almasam da oluşan image'ları çalıştıramadım birçok hata ile karşılaştım çoğunu araştırıp çözsemde image'ı lokalimde aşağıdaki gibi hatalar aldığım için çalıştıramadım
 
-C:\Users\umit.acikgoz\Desktop\PayDayBank\ExternalIncomeApi>docker run -t internalkycapi:1.0.5 . Exception in thread "main" java.lang.NoClassDefFoundError: org/springframework/boot/SpringApplication at InternalKycApi.InternalKycApplication.main(InternalKycApplication.java:12) Caused by: java.lang.ClassNotFoundException: org.springframework.boot.SpringApplication at java.net.URLClassLoader.findClass(URLClassLoader.java:382) at java.lang.ClassLoader.loadClass(ClassLoader.java:424) at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:349) at java.lang.ClassLoader.loadClass(ClassLoader.java:357) ...
-   
+C:\Users\umit.acikgoz\Desktop\PayDayBank\ExternalIncomeApi>docker run -t internalkycapi:1.0.5 . Exception in thread "main" java.lang.NoClassDefFoundError: org/springframework/boot/SpringApplication at InternalKycApi.InternalKycApplication.main(InternalKycApplication.java:12) Caused by: java.lang.ClassNotFoundException: org.springframework.boot.SpringApplication at java.net.URLClassLoader.findClass(URLClassLoader.java:382) at java.lang.ClassLoader.loadClass(ClassLoader.java:424) at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:349) at java.lang.ClassLoader.loadClass(ClassLoader.java:357) 
+  
+   
    .Net'de biraz uğraştırıcı olan IoC DI gibi yapılar için java spring boot'da basit çözümler getirilmiş. Java spring boot ile ilk defa ilgilenip bu şekilde bir proje yapıyor olmamdan kaynaklı eksikliklerim de olabilir.  
 
