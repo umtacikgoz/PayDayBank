@@ -1,18 +1,27 @@
 # PayDayBank
 
-Vaka ile ilgili üç ayrı yapıda SQL/NoSQL Databases ve Message Brokers(RabbitMQ) gibi ilgili teknolojiler kullanıldı.
-PayDayBankApi'de terminalde ilgili dizine gelip 'docker-compose up -d' ile servis olarak arka tarafta ayağa kaldırılmalı.
+Three separate api are designed for case study, relevant technologies such as SQL / NoSQL Databases and Message Brokers (RabbitMQ) were used in three separate cases related to the case. In PayDayBankApi, you should come to the relevant directory in the terminal and run containers by using 'docker-compose up -d' command as running service in the background.
 
-InternalKycApi : 8088 (8088/details) portunda basic authentication(InternalUser ve InternalPassword ile Postman gibi bir client ile de test edilebilir) ile çalışan müşteri detay bilgilerini dönen Bank'a içi servis Mobile Backend API projesinde servis katmanındaki KycDetailService ile bu servise bağlanıp detay bilgiler tckn ye göre alınıyor CustomerDetailController constructor'da 10001 ve 10002 tckn'li örnek 2 müşteri eklendi detay bilgiler Mongo NoSql'de tutuluyor
+
+
+InternalKycApi : Returning the customer detail information that works with basic authentication (also can be tested with a client such as Postman with InternalUser and InternalPassword with port '8088/details'), the internal service to the Bank is connected to this service with the KycDetailService on the service layer in the Mobile Backend API project and according to tckn.  2 test customer with 10001 and 10002 tckn added in CustomerDetailController constructor that customer detail information is kept in Mongo NoSql.
+
 
 ExternalIncomeApi : 8084 (8084/incomes) portunda Mobile Backend API'nin ücretli tüketeceği müşteri gelir bilgilerini dönen servis gelir bilgileri Postgresql'de tutuluyor benzer şekilde ilk çağrıda constructor'da 10001 ve 10002 tckn'li örnek 2 müşteri eklendi bu servis ücretli olduğu için Mobile Backend API'de gelir bilgisi daha önce bu external servis'den alınıp kaydedildiyse tekrar servise gidilmiyor internal Mongo Nosql'den alınıyor bu şekilde banka kendi içinde tutmuş oluyor Burada bilgiler zamana göre değişebilir diye redis gibi bir NoSql'de de belli süreler için caching yapısı da kurulabilir
 
-PayDayBankApi : 8090 (8090/loan) Mobile Backend API olarak çalışan servis burada ücretli gelir servisinden gelir bilgisi dönmediyse vs gibi farklı durumlara göre dönüş yapılıyor hesaplama işlemlerinin uzun süreceği farz edilerek talepler rabbitmq ile kuyruğa alınıp burada koşullara göre değerlendiriliyor sonucu mail ile dönülüyor benzer şekilde constructor'da 10001 ve 10002 tckn'li örnek 2 müşteri eklendi. Banka internal db'si olarak Mongo NoSql'de tutuluyor (Burdaki docker-compose.yml dosyası çalıştırılarak ilgili image'ların servisleri çalıştırılabilir) Vaka'da belirtilen LDAP system java'ya özgü sanırım ama jwt token authentication yapısı da kullanılabilir.
 
-Bu servislerin her birini ayrı image'lar haline getirip(docker.hub'a yükleyip vs) microservice çözümü haline getirmek istedim.Lokalde projeleri çalıştırıp (java -jar ./target/InternalKycApi-1.0-SNAPSHOT.jar gibi) image'ları oluşturmada hata almasam da oluşan image'ları çalıştıramadım birçok hata ile karşılaştım çoğunu araştırıp çözsem de image'ı lokalimde aşağıdaki gibi hatalar aldığım için çalıştıramadım
+ExternalIncomeApi: Returning customer income information to be consumed by Mobile Backend API on port '8084/incomes' that income information is kept in Postgresql. Similarly, 2 customers with 10001 and 10002 tckn were added to the constructor in the first call. In the Backend API, if the income information was previously taken from this external service, it is recorded to internal Mongo db for the next time taken from internal db for the existing tckn in the internal db.
+Caching structure can also be set up for certain periods in a NoSql like Redis because the information may change over time.
 
-C:\Users\umit.acikgoz\Desktop\PayDayBank\ExternalIncomeApi>docker run -t internalkycapi:1.0.5 . Exception in thread "main" java.lang.NoClassDefFoundError: org/springframework/boot/SpringApplication at InternalKycApi.InternalKycApplication.main(InternalKycApplication.java:12) Caused by: java.lang.ClassNotFoundException: org.springframework.boot.SpringApplication at java.net.URLClassLoader.findClass(URLClassLoader.java:382) at java.lang.ClassLoader.loadClass(ClassLoader.java:424) at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:349) at java.lang.ClassLoader.loadClass(ClassLoader.java:357) 
-  
-   
-   Ayrıca genelde .Net'de ile çalışan biri olarak biraz uğraştırıcı olan IoC DI gibi mimari yapılar için java spring boot'da basit çözümler getirilmiş. 
+
+PayDayBankApi:  (8090 / loan) The service running as Mobile Backend API is returned here according to different situations such as lack of income information from the paid income service, etc. It is assumed that the calculation process will take a long time, the requests are queued with rabbitmq and evaluated by conditions, and the result is returned by mail. The bank customer information is kept in Mongo NoSql as its internal db, jwt token authentication structure can also be used for Mobile Backend API instead of LDAP system
+
+
+
+I wanted to turn each of these services into separate images (upload to docker.hub, etc.) and turn them into a microservice solution. Although I did not receive  errors  for running services int the local port and buiilding the images, I could not run the images, I encountered many errors, although I researched and solved most of them, I could not run the image because I got errors such as following error when try to run images in my local place.
+
+C:\Users\umit.acikgoz\Desktop\PayDayBank\ExternalIncomeApi>docker run -t internalkycapi:1.0.5 . Exception in thread "main" java.lang.NoClassDefFoundError: org/springframework/boot/SpringApplication at InternalKycApi.InternalKycApplication.main(InternalKycApplication.java:12) Caused by: java.lang.ClassNotFoundException: org.springframework.boot.SpringApplication at java.net.URLClassLoader.findClass(URLClassLoader.java:382) at java.lang.ClassLoader.loadClass(ClassLoader.java:424) at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:349) at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+
+In addition, simple solutions have been introduced in java spring boot for architectural structures such as IoC DI, which is a bit challenging as someone working with .Net.
+
 
