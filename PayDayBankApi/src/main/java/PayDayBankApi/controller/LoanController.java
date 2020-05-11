@@ -61,13 +61,14 @@ public class LoanController {
     @PostMapping
     public ResponseEntity<String> post(@Valid @RequestBody LoanDemandRequestViewModel requestViewModel) {
 
-        KycDetail detail =     kycDetailService.getDetail(requestViewModel.tckn);
 
         // Talep eden kişinin tckn'sine ait bir müşteri bankanın kendi postgresql db'sinde var mı ?
         // Default 2 müşteri atadım ilk ilk talepte set edilecek şekilde
         Customer customer = _customerRepository.findCustomerByTckn(requestViewModel.tckn);
 
         if (customer != null) {
+
+            KycDetail detail =     kycDetailService.getDetail(requestViewModel.tckn);
 
             // Gelir Bilgisi Daha önce external servis'den alınıp kaydedildiyse
             // tekrar servise gidilmiyor internal Mongo Nosql'den alınıyor
@@ -76,7 +77,7 @@ public class LoanController {
 
             if (customerIncome == null) {
                 IncomeInfoServiceRequest incomeInfoRequest = new IncomeInfoServiceRequest(requestViewModel.tckn);
-                ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8081/incomes", incomeInfoRequest, String.class);
+                ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8084/incomes", incomeInfoRequest, String.class);
 
                 if (Double.valueOf(response.getBody()) > 0) {
                     Income income = new Income();
@@ -93,14 +94,14 @@ public class LoanController {
 
                 loanDemandProducer.sendToQueue(getLoanDemand(detail,customerIncome,requestViewModel.requestedAmount));
 
-                return ResponseEntity.ok(customerIncome.toString() +" ile Kredi Hesaplama --");
+                return ResponseEntity.ok("Kredi talebiniz alınmıştır.");
             } else {
 
                 // Kredi Hesaplama
 
                 loanDemandProducer.sendToQueue(getLoanDemand(detail,customerIncome,requestViewModel.requestedAmount));
 
-                return ResponseEntity.ok(customerIncome.toString() +" ile Kredi Hesaplama ---");
+                return ResponseEntity.ok("Kredi talebiniz alınmıştır.");
             }
 
         } else {
