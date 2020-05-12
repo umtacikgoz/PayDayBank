@@ -1,6 +1,6 @@
 # PayDayBank
 
-Three separate api are designed for case study, relevant technologies such as SQL / NoSQL Databases and Message Brokers (RabbitMQ) were used in three separate cases related to the case. In PayDayBankApi, you should come to the relevant directory in the terminal and run containers by using 'docker-compose up -d' command as running service in the background.
+Three separate api are designed for the case study, relevant technologies such as SQL / NoSQL Databases and Message Brokers (RabbitMQ) were used in three separate cases related to the case. In PayDayBankApi, you should come to the relevant directory in the terminal and run containers by using 'docker-compose up -d' command as running service in the background.
 
 InternalKycApi : Returning the customer detail information that works with basic authentication (also can be tested with a client such as Postman with InternalUser and InternalPassword with port '8088/details'), the internal service to the Bank is connected to this service with the KycDetailService on the service layer in the Mobile Backend API project and according to tckn.  2 test customer with 10001 and 10002 tckn added in CustomerDetailController constructor that customer detail information is kept in Mongo NoSql.
 
